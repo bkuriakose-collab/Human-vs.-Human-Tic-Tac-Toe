@@ -6,5 +6,5 @@
 #include "../src/tictactoe.hpp"
 
 TEST_CASE( "it works" ) {
-    REQUIRE( true );
+    REQUIRE( true );// didnt get time to wokr on in it sorry :(
 }
