@@ -24,4 +24,16 @@ TEST_CASE("swithing players work") {
     REQUIRE(game.get_current_player() == 'O');
 }
 
+TEST_CASE("game puts player back to X") {
+    TicTacToe game;
+    game.switch_player();
+    game.reset_game();
+    REQUIRE(game.get_current_player() == 'X');
+}
+TEST_CASE("game clears taken spots") {
+    TicTacToe game;
+    game.make_move(1);
+    game.reset_game();
+    REQUIRE(game.is_valid_move("1") == true);
+}
 
