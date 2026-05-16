@@ -1,6 +1,7 @@
 #include <string>
 #include "tictactoe.hpp"
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -16,6 +17,8 @@ TicTacToe::TicTacToe()
 	board.push_back("8");
 	board.push_back("9");
 	current_player = 'X';
+	trapEnabled = false;
+	trapPosition = -1;
 }
 void TicTacToe::print_board() const
 {
@@ -93,15 +96,17 @@ bool TicTacToe::check_win() const
 
 
 }
-bool TicTacToe::check_draw() const
-{
-	for (int i = 0; i < board.size(); i++)
-	{
-		if (board[i] != "X" && board[i] != "O")
-		{
+bool TicTacToe::check_draw() const {
+	for (int i = 0; i < board.size(); i++) {
+		if (trapEnabled == true && i + 1 == trapPosition) {
+			continue;
+		}
+
+		if (board[i] != "X" && board[i] != "O") {
 			return false;
 		}
 	}
+
 	return true;
 }
 void TicTacToe::switch_player()
@@ -130,9 +135,29 @@ void TicTacToe::reset_game() {
 
 	current_player = 'X';
 
+	trapEnabled = false;
+	trapPosition = -1;
+
 
 }
 char TicTacToe::get_current_player() const
 {
 	return current_player;
+}
+void TicTacToe::enableTrap() {
+	trapEnabled = true;
+	trapPosition = rand() % 9 + 1;
+}
+
+void TicTacToe::disableTrap() {
+	trapEnabled = false;
+	trapPosition = -1;
+}
+
+bool TicTacToe::isTrap(int position) const {
+	if (trapEnabled == true && position == trapPosition) {
+		return true;
+	}
+
+	return false;
 }

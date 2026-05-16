@@ -1,12 +1,17 @@
 #include <iostream>
 
 #include "src/tictactoe.hpp"
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 int main() {
+	srand(time(0));
 	bool play_again = true;
+	string trapChoice;
 	string answer;
 	string mode;
+
 	while (play_again) {
 		
 		while (true) {
@@ -24,9 +29,35 @@ int main() {
 			}
 		}
 
+		while (true) {
+			cout << "Would you like to include a trap cell?" << endl;
+			cout << "1. Yes" << endl;
+			cout << "2. No" << endl;
+			cout << "Enter your choice: ";
+			getline(cin, trapChoice);
+
+			if (trapChoice == "1" || trapChoice == "2") {
+				break;
+			}
+			else {
+				cout << "That is not a valid entry!" << endl;
+			}
+		}
+
 	TicTacToe game;
 	string input;
-	cout << "Welcome to Tic-Tac-Toe!" << endl;
+	
+	if (trapChoice == "1") {
+		game.enableTrap();
+		cout << "Welcome to Tic-Tac-Toe!" << endl;
+		cout << "Great! A trap has been hidden on the board." << endl;
+	}
+	else {
+		game.disableTrap();
+		cout << "Welcome to Tic-Tac-Toe!" << endl;
+	}
+
+
 	game.print_board();
 	
 		while (true)
@@ -35,6 +66,20 @@ int main() {
 			if ((mode == "2" && game.get_current_player() == 'O') || (mode == "3" && game.get_current_player() == 'X')) {
 				for (int i = 1; i <= 9; i++) {
 					string computerMove = to_string(i);
+					if (game.is_valid_move(computerMove) == true) {
+						cout << "Computer chooses " << i << endl;
+
+						if (game.isTrap(i) == true) {
+							cout << "Oh no! " << game.get_current_player() << " set off the trap and loses their turn." << endl;
+							game.print_board();
+						}
+						else {
+							game.make_move(i);
+							game.print_board();
+						}
+
+						break;
+					}
 					if (game.is_valid_move(computerMove) == true) {
 						cout << "Computer chooses " << i << endl;
 						game.make_move(i);
@@ -69,8 +114,15 @@ int main() {
 
 
 			int position = input[0] - '0';
-			game.make_move(position);
-			game.print_board();
+
+			if (game.isTrap(position) == true) {
+				cout << "Oh no! " << game.get_current_player() << " set off the trap and loses their turn." << endl;
+				game.print_board();
+			}
+			else {
+				game.make_move(position);
+				game.print_board();
+			}
 
 			if (game.check_win() == true)
 			{

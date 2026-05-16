@@ -15,8 +15,13 @@ public:
 	void switch_player();
 	void reset_game();
 	char get_current_player() const;
+	void enableTrap();
+	void disableTrap();
+	bool isTrap(int position) const;
 
 private:
 	vector<string> board;
 	char current_player;
+	bool trapEnabled;
+	int trapPosition;
 };
